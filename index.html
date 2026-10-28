@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Замени этот заголовок</title>
+<title>Самые богатые компании мира</title>
 <style>
   :root { --bg: #fbfbfa; --fg: #1a1a18; --dim: #6b6b66; --line: #e4e4e0; }
   @media (prefers-color-scheme: dark) {
@@ -18,28 +18,40 @@
   main { max-width: 34rem; width: 100%; }
   h1 { font-size: 1.75rem; line-height: 1.2; margin: 0 0 .75rem; }
   p { margin: 0 0 1rem; }
-  .dim { color: var(--dim); }
-  .box { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; margin-top: 28px; }
-  code { background: var(--line); padding: .1em .35em; border-radius: 4px; font-size: .9em; }
+  .dim { color: var(--dim); font-size: .9rem; }
+  ol { margin: 0; padding-left: 2rem; }
+  li { padding: 8px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+  .cap { color: var(--dim); white-space: nowrap; }
 </style>
 </head>
 <body>
 <main>
 
-  <h1>Страница работает</h1>
+  <h1>Самые богатые компании мира</h1>
 
-  <p>Если ты это читаешь в интернете, а не у себя на компьютере, — значит весь путь уже собран:
-  репозиторий есть, страница опубликована, ссылку можно кинуть другу.</p>
+  <p class="dim">Рейтинг по рыночной капитализации, 2026 год. От самой богатой к менее богатой.
+  Суммы приблизительные, в триллионах долларов США.</p>
 
-  <p class="dim">Это всё, что здесь должно быть. Содержимое придумаешь ты, а сделает ИИ.</p>
-
-  <div class="box">
-    <p><strong>Твой следующий ход.</strong></p>
-    <p>Открой <code>zadanie-1.md</code> и напиши, какую страницу ты хочешь — <strong>до того</strong>, как попросишь ИИ.
-    Потом попроси. Потом запусти <code>./check.sh</code>.</p>
-    <p class="dim">Проверка сейчас краснеет на заголовке этой страницы: он так и называется
-    «Замени этот заголовок». Это нарочно.</p>
-  </div>
+  <ol>
+    <li>Nvidia <span class="cap">— ≈ 5,0 трлн $</span></li>
+    <li>Apple <span class="cap">— ≈ 4,0 трлн $</span></li>
+    <li>Microsoft <span class="cap">— ≈ 3,8 трлн $</span></li>
+    <li>Alphabet (Google) <span class="cap">— ≈ 3,7 трлн $</span></li>
+    <li>Amazon <span class="cap">— ≈ 2,4 трлн $</span></li>
+    <li>Meta <span class="cap">— ≈ 1,7 трлн $</span></li>
+    <li>Broadcom <span class="cap">— ≈ 1,6 трлн $</span></li>
+    <li>Saudi Aramco <span class="cap">— ≈ 1,6 трлн $</span></li>
+    <li>TSMC <span class="cap">— ≈ 1,5 трлн $</span></li>
+    <li>Tesla <span class="cap">— ≈ 1,4 трлн $</span></li>
+    <li>Berkshire Hathaway <span class="cap">— ≈ 1,1 трлн $</span></li>
+    <li>Eli Lilly <span class="cap">— ≈ 0,9 трлн $</span></li>
+    <li>Walmart <span class="cap">— ≈ 0,9 трлн $</span></li>
+    <li>JPMorgan Chase <span class="cap">— ≈ 0,85 трлн $</span></li>
+    <li>Samsung Electronics <span class="cap">— ≈ 0,7 трлн $</span></li>
+    <li>Tencent <span class="cap">— ≈ 0,7 трлн $</span></li>
+    <li>Visa <span class="cap">— ≈ 0,65 трлн $</span></li>
+    <li>Oracle <span class="cap">— ≈ 0,6 трлн $</span></li>
+  </ol>
 
 </main>
 </body>
