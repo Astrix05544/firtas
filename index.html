@@ -22,7 +22,20 @@
   ol { margin: 0; padding-left: 2rem; }
   li { padding: 8px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
   .cap { color: var(--dim); white-space: nowrap; }
-</style>
+  .logo { width: 24px; height: 24px; vertical-align: middle; margin-right: 10px; border-radius: 4px; }
+  .name { position: relative; cursor: help; }
+  .name::after {
+    content: attr(data-info); position: absolute; left: 0; bottom: 100%; z-index: 1;
+    width: max-content; max-width: min(18rem, 80vw); padding: 6px 10px; border-radius: 6px;
+    background: var(--fg); color: var(--bg); font-size: .85rem; line-height: 1.4;
+    opacity: 0; pointer-events: none;
+  }
+  .name:hover::after, .name:focus::after { opacity: 1; }
+  button {
+    margin: 0 0 1.5rem; padding: 8px 16px; font: inherit; cursor: pointer;
+    color: var(--fg); background: transparent; border: 1px solid var(--fg); border-radius: 6px;
+  }
+  </style>
 </head>
 <body>
 <main>
@@ -32,27 +45,92 @@
   <p class="dim">Рейтинг по рыночной капитализации, 2026 год. От самой богатой к менее богатой.
   Суммы приблизительные, в триллионах долларов США.</p>
 
+  <button type="button" onclick="скачать()">Скачать</button>
+
   <ol>
-    <li>Nvidia <span class="cap">— ≈ 5,0 трлн $</span></li>
-    <li>Apple <span class="cap">— ≈ 4,0 трлн $</span></li>
-    <li>Microsoft <span class="cap">— ≈ 3,8 трлн $</span></li>
-    <li>Alphabet (Google) <span class="cap">— ≈ 3,7 трлн $</span></li>
-    <li>Amazon <span class="cap">— ≈ 2,4 трлн $</span></li>
-    <li>Meta <span class="cap">— ≈ 1,7 трлн $</span></li>
-    <li>Broadcom <span class="cap">— ≈ 1,6 трлн $</span></li>
-    <li>Saudi Aramco <span class="cap">— ≈ 1,6 трлн $</span></li>
-    <li>TSMC <span class="cap">— ≈ 1,5 трлн $</span></li>
-    <li>Tesla <span class="cap">— ≈ 1,4 трлн $</span></li>
-    <li>Berkshire Hathaway <span class="cap">— ≈ 1,1 трлн $</span></li>
-    <li>Eli Lilly <span class="cap">— ≈ 0,9 трлн $</span></li>
-    <li>Walmart <span class="cap">— ≈ 0,9 трлн $</span></li>
-    <li>JPMorgan Chase <span class="cap">— ≈ 0,85 трлн $</span></li>
-    <li>Samsung Electronics <span class="cap">— ≈ 0,7 трлн $</span></li>
-    <li>Tencent <span class="cap">— ≈ 0,7 трлн $</span></li>
-    <li>Visa <span class="cap">— ≈ 0,65 трлн $</span></li>
-    <li>Oracle <span class="cap">— ≈ 0,6 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=nvidia.com&sz=64" alt="Логотип Nvidia" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1993 · CEO: Дженсен Хуанг">Nvidia</span> <span class="cap">— ≈ 5,0 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Логотип Apple" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1976 · CEO: Тим Кук">Apple</span> <span class="cap">— ≈ 4,0 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Логотип Microsoft" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1975 · CEO: Сатья Наделла">Microsoft</span> <span class="cap">— ≈ 3,8 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=abc.xyz&sz=64" alt="Логотип Alphabet (Google)" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2015 · CEO: Сундар Пичаи">Alphabet (Google)</span> <span class="cap">— ≈ 3,7 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Логотип Amazon" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1994 · CEO: Эндрю Джесси">Amazon</span> <span class="cap">— ≈ 2,4 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Логотип Meta" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2004 · CEO: Марк Цукерберг">Meta</span> <span class="cap">— ≈ 1,7 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=broadcom.com&sz=64" alt="Логотип Broadcom" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1961 · CEO: Хок Тан">Broadcom</span> <span class="cap">— ≈ 1,6 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=aramco.com&sz=64" alt="Логотип Saudi Aramco" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1933 · CEO: Амин Аль-Нассер">Saudi Aramco</span> <span class="cap">— ≈ 1,6 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=tsmc.com&sz=64" alt="Логотип TSMC" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1987 · CEO: Си-Си Вэй">TSMC</span> <span class="cap">— ≈ 1,5 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=tesla.com&sz=64" alt="Логотип Tesla" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2003 · CEO: Илон Маск">Tesla</span> <span class="cap">— ≈ 1,4 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=berkshirehathaway.com&sz=64" alt="Логотип Berkshire Hathaway" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1839 · CEO: Грег Абель">Berkshire Hathaway</span> <span class="cap">— ≈ 1,1 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=lilly.com&sz=64" alt="Логотип Eli Lilly" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1876 · CEO: Дэйв Рикс">Eli Lilly</span> <span class="cap">— ≈ 0,9 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=walmart.com&sz=64" alt="Логотип Walmart" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1962 · CEO: Джон Фёрнер">Walmart</span> <span class="cap">— ≈ 0,9 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=jpmorganchase.com&sz=64" alt="Логотип JPMorgan Chase" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2000 · CEO: Джейми Даймон">JPMorgan Chase</span> <span class="cap">— ≈ 0,85 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=samsung.com&sz=64" alt="Логотип Samsung Electronics" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1938 · CEO: Ёони Чон (Yoonie Joung)">Samsung Electronics</span> <span class="cap">— ≈ 0,7 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=tencent.com&sz=64" alt="Логотип Tencent" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1998 · CEO: Хуатэн (Пони) Ма">Tencent</span> <span class="cap">— ≈ 0,7 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=visa.com&sz=64" alt="Логотип Visa" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1958 · CEO: Райан Макинерни">Visa</span> <span class="cap">— ≈ 0,65 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=oracle.com&sz=64" alt="Логотип Oracle" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1977 · CEO: Клэй Магуирк">Oracle</span> <span class="cap">— ≈ 0,6 трлн $</span></li>
   </ol>
 
 </main>
+<script>
+  function скачать() {
+    // 1. Рисуем страницу на листе A4 (в два раза крупнее, чтобы было чётко)
+    var W = 1190, H = 1684;
+    var холст = document.createElement("canvas");
+    холст.width = W; холст.height = H;
+    var g = холст.getContext("2d");
+    g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
+
+    g.fillStyle = "#000"; g.font = "bold 56px sans-serif";
+    g.fillText(document.querySelector("h1").innerText, 80, 140);
+
+    g.fillStyle = "#555"; g.font = "28px sans-serif";
+    var строки = document.querySelector("p.dim").innerText.replace(/\s+/g, " ").split(/(?<=\.) /);
+    строки.forEach(function (s, i) { g.fillText(s, 80, 200 + i * 40); });
+
+    g.font = "34px sans-serif";
+    document.querySelectorAll("li").forEach(function (li, i) {
+      var y = 360 + i * 72;
+      g.fillStyle = "#000"; g.textAlign = "left";
+      g.fillText((i + 1) + ". " + li.querySelector(".name").innerText, 80, y);
+      g.fillStyle = "#555"; g.textAlign = "right";
+      g.fillText(li.querySelector(".cap").innerText.replace("— ", ""), W - 80, y);
+      g.fillStyle = "#ddd"; g.fillRect(80, y + 22, W - 160, 2);
+    });
+
+    // 2. Картинку кладём в простой PDF из одной страницы
+    var байты = atob(холст.toDataURL("image/jpeg", 0.92).split(",")[1]);
+    var картинка = new Uint8Array(байты.length);
+    for (var k = 0; k < байты.length; k++) картинка[k] = байты.charCodeAt(k);
+
+    var части = [], смещения = [], длина = 0;
+    function добавить(данные) {
+      var b = typeof данные === "string" ? Uint8Array.from(данные, function (ch) { return ch.charCodeAt(0); }) : данные;
+      части.push(b); длина += b.length;
+    }
+    function объект(номер, текст, поток) {
+      смещения[номер] = длина;
+      добавить(номер + " 0 obj\n" + текст);
+      if (поток) { добавить("\nstream\n"); добавить(поток); добавить("\nendstream"); }
+      добавить("\nendobj\n");
+    }
+    var рисунок = "q 595 0 0 842 0 0 cm /Im0 Do Q";
+    добавить("%PDF-1.4\n");
+    объект(1, "<< /Type /Catalog /Pages 2 0 R >>");
+    объект(2, "<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+    объект(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>");
+    объект(4, "<< /Length " + рисунок.length + " >>", рисунок);
+    объект(5, "<< /Type /XObject /Subtype /Image /Width " + W + " /Height " + H +
+      " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + картинка.length + " >>", картинка);
+
+    var таблица = длина;
+    добавить("xref\n0 6\n0000000000 65535 f \n");
+    for (var n = 1; n <= 5; n++) добавить(("0000000000" + смещения[n]).slice(-10) + " 00000 n \n");
+    добавить("trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n" + таблица + "\n%%EOF");
+
+    // 3. Скачиваем файл
+    var ссылка = document.createElement("a");
+    ссылка.href = URL.createObjectURL(new Blob(части, { type: "application/pdf" }));
+    ссылка.download = "Топ-18 богатых компаний мира.pdf";
+    ссылка.click();
+  }
+</script>
 </body>
 </html>
