@@ -66,6 +66,8 @@
     <li><img class="logo" src="https://www.google.com/s2/favicons?domain=tencent.com&sz=64" alt="Логотип Tencent" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1998 · CEO: Хуатэн (Пони) Ма">Tencent</span> <span class="cap">— ≈ 0,7 трлн $</span></li>
     <li><img class="logo" src="https://www.google.com/s2/favicons?domain=visa.com&sz=64" alt="Логотип Visa" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1958 · CEO: Райан Макинерни">Visa</span> <span class="cap">— ≈ 0,65 трлн $</span></li>
     <li><img class="logo" src="https://www.google.com/s2/favicons?domain=oracle.com&sz=64" alt="Логотип Oracle" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1977 · CEO: Клэй Магуирк">Oracle</span> <span class="cap">— ≈ 0,6 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=exxonmobil.com&sz=64" alt="Логотип Exxon Mobil" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1999 · CEO: Даррен Вудс">Exxon Mobil</span> <span class="cap">— ≈ 0,5 трлн $</span></li>
+    <li><img class="logo" src="https://www.google.com/s2/favicons?domain=mastercard.com&sz=64" alt="Логотип Mastercard" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1966 · CEO: Майкл Мибах">Mastercard</span> <span class="cap">— ≈ 0,5 трлн $</span></li>
   </ol>
 
 </main>
@@ -87,7 +89,7 @@
 
     g.font = "34px sans-serif";
     document.querySelectorAll("li").forEach(function (li, i) {
-      var y = 360 + i * 72;
+      var y = 360 + i * 64;
       g.fillStyle = "#000"; g.textAlign = "left";
       g.fillText((i + 1) + ". " + li.querySelector(".name").innerText, 80, y);
       g.fillStyle = "#555"; g.textAlign = "right";
@@ -128,7 +130,7 @@
     // 3. Скачиваем файл
     var ссылка = document.createElement("a");
     ссылка.href = URL.createObjectURL(new Blob(части, { type: "application/pdf" }));
-    ссылка.download = "Топ-18 богатых компаний мира.pdf";
+    ссылка.download = "Топ-20 богатых компаний мира.pdf";
     ссылка.click();
   }
 </script>
