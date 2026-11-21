@@ -20,12 +20,21 @@
   ol[hidden] { display: none; }
   li {
     grid-column: span var(--c); grid-row: span var(--r);
+    position: relative; perspective: 800px; cursor: pointer;
+    font-size: calc(.8rem + var(--cap) * .1rem); overflow-wrap: anywhere;
+  }
+  .inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .6s; }
+  li.flipped .inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
     display: flex; flex-wrap: wrap; align-content: flex-start; align-items: center; gap: 4px 10px;
     padding: 10px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-    font-size: calc(.8rem + var(--cap) * .1rem); overflow-wrap: anywhere;
     transition: border-color .15s, box-shadow .15s, background .15s;
   }
-  li:hover {
+  .back { transform: rotateY(180deg); flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 2px; }
+  .back .num { color: var(--green); font-weight: 700; }
+  .phone { width: 1.3em; height: 1.3em; vertical-align: middle; margin-left: .3em; color: var(--green); }
+  li:hover .face {
     border-color: var(--brand); box-shadow: 0 0 18px var(--brand);
     background: color-mix(in srgb, var(--brand) 25%, var(--card));
   }
@@ -71,26 +80,26 @@
   </div>
 
   <ol>
-    <li style="--brand:#76b900;--cap:5.0;--c:8;--r:5"><img class="logo" src="https://www.google.com/s2/favicons?domain=nvidia.com&sz=64" alt="Логотип Nvidia" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1993 · CEO: Дженсен Хуанг">Nvidia</span> <span class="cap">— ≈ 5,0 трлн $</span></li>
-    <li style="--brand:#a2aaad;--cap:4.0;--c:8;--r:4"><img class="logo" src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Логотип Apple" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1976 · CEO: Тим Кук">Apple</span> <span class="cap">— ≈ 4,0 трлн $</span></li>
-    <li style="--brand:#00a4ef;--cap:3.8;--c:6;--r:5"><img class="logo" src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Логотип Microsoft" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1975 · CEO: Сатья Наделла">Microsoft</span> <span class="cap">— ≈ 3,8 трлн $</span></li>
-    <li style="--brand:#4285f4;--cap:3.7;--c:6;--r:5"><img class="logo" src="https://www.google.com/s2/favicons?domain=abc.xyz&sz=64" alt="Логотип Alphabet (Google)" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2015 · CEO: Сундар Пичаи">Alphabet (Google)</span> <span class="cap">— ≈ 3,7 трлн $</span></li>
-    <li style="--brand:#ff9900;--cap:2.4;--c:5;--r:4"><img class="logo" src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Логотип Amazon" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1994 · CEO: Эндрю Джесси">Amazon</span> <span class="cap">— ≈ 2,4 трлн $</span></li>
-    <li style="--brand:#0866ff;--cap:1.7;--c:7;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Логотип Meta" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2004 · CEO: Марк Цукерберг">Meta</span> <span class="cap">— ≈ 1,7 трлн $</span></li>
-    <li style="--brand:#cc092f;--cap:1.6;--c:4;--r:3"><img class="logo" src="https://www.google.com/s2/favicons?domain=broadcom.com&sz=64" alt="Логотип Broadcom" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1961 · CEO: Хок Тан">Broadcom</span> <span class="cap">— ≈ 1,6 трлн $</span></li>
-    <li style="--brand:#00a3e0;--cap:1.6;--c:4;--r:3"><img class="logo" src="https://www.google.com/s2/favicons?domain=aramco.com&sz=64" alt="Логотип Saudi Aramco" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1933 · CEO: Амин Аль-Нассер">Saudi Aramco</span> <span class="cap">— ≈ 1,6 трлн $</span></li>
-    <li style="--brand:#342c2d;--cap:1.5;--c:4;--r:3"><img class="logo" src="https://www.google.com/s2/favicons?domain=tsmc.com&sz=64" alt="Логотип TSMC" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1987 · CEO: Си-Си Вэй">TSMC</span> <span class="cap">— ≈ 1,5 трлн $</span></li>
-    <li style="--brand:#e31937;--cap:1.4;--c:4;--r:3"><img class="logo" src="https://www.google.com/s2/favicons?domain=tesla.com&sz=64" alt="Логотип Tesla" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2003 · CEO: Илон Маск">Tesla</span> <span class="cap">— ≈ 1,4 трлн $</span></li>
-    <li style="--brand:#1f3a93;--cap:1.1;--c:3;--r:3"><img class="logo" src="https://www.google.com/s2/favicons?domain=berkshirehathaway.com&sz=64" alt="Логотип Berkshire Hathaway" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1839 · CEO: Грег Абель">Berkshire Hathaway</span> <span class="cap">— ≈ 1,1 трлн $</span></li>
-    <li style="--brand:#d52b1e;--cap:0.9;--c:4;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=lilly.com&sz=64" alt="Логотип Eli Lilly" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1876 · CEO: Дэйв Рикс">Eli Lilly</span> <span class="cap">— ≈ 0,9 трлн $</span></li>
-    <li style="--brand:#0071ce;--cap:0.9;--c:4;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=walmart.com&sz=64" alt="Логотип Walmart" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1962 · CEO: Джон Фёрнер">Walmart</span> <span class="cap">— ≈ 0,9 трлн $</span></li>
-    <li style="--brand:#a67c52;--cap:0.85;--c:3;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=jpmorganchase.com&sz=64" alt="Логотип JPMorgan Chase" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2000 · CEO: Джейми Даймон">JPMorgan Chase</span> <span class="cap">— ≈ 0,85 трлн $</span></li>
-    <li style="--brand:#1428a0;--cap:0.7;--c:3;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=samsung.com&sz=64" alt="Логотип Samsung Electronics" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1938 · CEO: Ёони Чон (Yoonie Joung)">Samsung Electronics</span> <span class="cap">— ≈ 0,7 трлн $</span></li>
-    <li style="--brand:#0052d9;--cap:0.7;--c:3;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=tencent.com&sz=64" alt="Логотип Tencent" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1998 · CEO: Хуатэн (Пони) Ма">Tencent</span> <span class="cap">— ≈ 0,7 трлн $</span></li>
-    <li style="--brand:#1a1f71;--cap:0.65;--c:3;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=visa.com&sz=64" alt="Логотип Visa" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1958 · CEO: Райан Макинерни">Visa</span> <span class="cap">— ≈ 0,65 трлн $</span></li>
-    <li style="--brand:#f80000;--cap:0.6;--c:2;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=oracle.com&sz=64" alt="Логотип Oracle" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1977 · CEO: Клэй Магуирк">Oracle</span> <span class="cap">— ≈ 0,6 трлн $</span></li>
-    <li style="--brand:#ed1b2d;--cap:0.5;--c:2;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=exxonmobil.com&sz=64" alt="Логотип Exxon Mobil" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1999 · CEO: Даррен Вудс">Exxon Mobil</span> <span class="cap">— ≈ 0,5 трлн $</span></li>
-    <li style="--brand:#eb001b;--cap:0.5;--c:2;--r:2"><img class="logo" src="https://www.google.com/s2/favicons?domain=mastercard.com&sz=64" alt="Логотип Mastercard" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1966 · CEO: Майкл Мибах">Mastercard</span> <span class="cap">— ≈ 0,5 трлн $</span></li>
+    <li style="--brand:#76b900;--cap:5.0;--c:8;--r:5"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=nvidia.com&sz=64" alt="Логотип Nvidia" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1993 · CEO: Дженсен Хуанг">Nvidia</span> <span class="cap">— ≈ 5,0 трлн $</span></div></div></li>
+    <li style="--brand:#a2aaad;--cap:4.0;--c:8;--r:4"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Логотип Apple" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1976 · CEO: Тим Кук">Apple</span> <span class="cap">— ≈ 4,0 трлн $</span></div></div></li>
+    <li style="--brand:#00a4ef;--cap:3.8;--c:6;--r:5"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Логотип Microsoft" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1975 · CEO: Сатья Наделла">Microsoft</span> <span class="cap">— ≈ 3,8 трлн $</span></div></div></li>
+    <li style="--brand:#4285f4;--cap:3.7;--c:6;--r:5"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=abc.xyz&sz=64" alt="Логотип Alphabet (Google)" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2015 · CEO: Сундар Пичаи">Alphabet (Google)</span> <span class="cap">— ≈ 3,7 трлн $</span></div></div></li>
+    <li style="--brand:#ff9900;--cap:2.4;--c:5;--r:4"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Логотип Amazon" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1994 · CEO: Эндрю Джесси">Amazon</span> <span class="cap">— ≈ 2,4 трлн $</span></div></div></li>
+    <li style="--brand:#0866ff;--cap:1.7;--c:7;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Логотип Meta" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2004 · CEO: Марк Цукерберг">Meta</span> <span class="cap">— ≈ 1,7 трлн $</span></div></div></li>
+    <li style="--brand:#cc092f;--cap:1.6;--c:4;--r:3"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=broadcom.com&sz=64" alt="Логотип Broadcom" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1961 · CEO: Хок Тан">Broadcom</span> <span class="cap">— ≈ 1,6 трлн $</span></div></div></li>
+    <li style="--brand:#00a3e0;--cap:1.6;--c:4;--r:3"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=aramco.com&sz=64" alt="Логотип Saudi Aramco" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1933 · CEO: Амин Аль-Нассер">Saudi Aramco</span> <span class="cap">— ≈ 1,6 трлн $</span></div></div></li>
+    <li style="--brand:#342c2d;--cap:1.5;--c:4;--r:3"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=tsmc.com&sz=64" alt="Логотип TSMC" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1987 · CEO: Си-Си Вэй">TSMC</span> <span class="cap">— ≈ 1,5 трлн $</span></div></div></li>
+    <li style="--brand:#e31937;--cap:1.4;--c:4;--r:3"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=tesla.com&sz=64" alt="Логотип Tesla" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2003 · CEO: Илон Маск">Tesla</span> <span class="cap">— ≈ 1,4 трлн $</span></div></div></li>
+    <li style="--brand:#1f3a93;--cap:1.1;--c:3;--r:3"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=berkshirehathaway.com&sz=64" alt="Логотип Berkshire Hathaway" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1839 · CEO: Грег Абель">Berkshire Hathaway</span> <span class="cap">— ≈ 1,1 трлн $</span></div></div></li>
+    <li style="--brand:#d52b1e;--cap:0.9;--c:4;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=lilly.com&sz=64" alt="Логотип Eli Lilly" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1876 · CEO: Дэйв Рикс">Eli Lilly</span> <span class="cap">— ≈ 0,9 трлн $</span></div></div></li>
+    <li style="--brand:#0071ce;--cap:0.9;--c:4;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=walmart.com&sz=64" alt="Логотип Walmart" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1962 · CEO: Джон Фёрнер">Walmart</span> <span class="cap">— ≈ 0,9 трлн $</span></div></div></li>
+    <li style="--brand:#a67c52;--cap:0.85;--c:3;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=jpmorganchase.com&sz=64" alt="Логотип JPMorgan Chase" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 2000 · CEO: Джейми Даймон">JPMorgan Chase</span> <span class="cap">— ≈ 0,85 трлн $</span></div></div></li>
+    <li style="--brand:#1428a0;--cap:0.7;--c:3;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=samsung.com&sz=64" alt="Логотип Samsung Electronics" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1938 · CEO: Ёони Чон (Yoonie Joung)">Samsung Electronics</span> <span class="cap">— ≈ 0,7 трлн $</span></div></div></li>
+    <li style="--brand:#0052d9;--cap:0.7;--c:3;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=tencent.com&sz=64" alt="Логотип Tencent" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1998 · CEO: Хуатэн (Пони) Ма">Tencent</span> <span class="cap">— ≈ 0,7 трлн $</span></div></div></li>
+    <li style="--brand:#1a1f71;--cap:0.65;--c:3;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=visa.com&sz=64" alt="Логотип Visa" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1958 · CEO: Райан Макинерни">Visa</span> <span class="cap">— ≈ 0,65 трлн $</span></div></div></li>
+    <li style="--brand:#f80000;--cap:0.6;--c:2;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=oracle.com&sz=64" alt="Логотип Oracle" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1977 · CEO: Клэй Магуирк">Oracle</span> <span class="cap">— ≈ 0,6 трлн $</span></div></div></li>
+    <li style="--brand:#ed1b2d;--cap:0.5;--c:2;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=exxonmobil.com&sz=64" alt="Логотип Exxon Mobil" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1999 · CEO: Даррен Вудс">Exxon Mobil</span> <span class="cap">— ≈ 0,5 трлн $</span></div></div></li>
+    <li style="--brand:#eb001b;--cap:0.5;--c:2;--r:2"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=mastercard.com&sz=64" alt="Логотип Mastercard" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1966 · CEO: Майкл Мибах">Mastercard</span> <span class="cap">— ≈ 0,5 трлн $</span></div></div></li>
   </ol>
 
 </main>
@@ -150,6 +159,26 @@
     document.getElementById("итог").innerText = верно ? "Верно!" : "Неверно.";
     таймер = setTimeout(новаяПара, 3000);
   }
+
+  // Карточки: isFlipped, переворот по клику, обратная сторона в iPhone (1 iPhone = $1000)
+  var ЦЕНА_IPHONE = 1000;
+  var иконка = '<svg class="phone" viewBox="0 0 24 24" role="img" aria-label="iPhone 18"><title>iPhone 18</title>' +
+    '<rect x="6" y="1.5" width="12" height="21" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/>' +
+    '<rect x="9.5" y="3.5" width="5" height="1.6" rx=".8" fill="currentColor"/>' +
+    '<text x="12" y="15" font-size="6" font-weight="700" text-anchor="middle" fill="currentColor">18</text></svg>';
+  var данные = компании();
+  document.querySelectorAll("li").forEach(function (li, i) {
+    li.isFlipped = false;
+    var штук = Math.round(данные[i].сумма * 1e12 / ЦЕНА_IPHONE);
+    var зад = document.createElement("div");
+    зад.className = "face back";
+    зад.innerHTML = '<span class="num">≈ ' + штук.toLocaleString("ru-RU") + иконка + '</span>';
+    li.querySelector(".inner").appendChild(зад);
+    li.addEventListener("click", function () {
+      li.isFlipped = !li.isFlipped;
+      li.classList.toggle("flipped", li.isFlipped);
+    });
+  });
 
   function скачать() {
     // 1. Рисуем страницу на листе A4 (в два раза крупнее, чтобы было чётко)
