@@ -114,28 +114,67 @@ verdict "2. Таблица заменена на плиточную сетку, 
 # ---------------------------------------------------------------------------
 # Предикат 3. Карточка подсвечивается фирменным цветом компании при наведении.
 #
-# Проверяется по тексту:
-#   - в CSS есть правило :hover для карточки (не для .name, это старая
-#     подсказка) с подсветкой: background, border-color, box-shadow или color;
-#   - для каждой из 20 компаний в одной строке с её названием есть цвет вида
-#     #rrggbb (в style карточки или в CSS-правиле с её именем).
+# Раньше здесь искали слово: «рядом с названием есть #rrggbb». Так можно
+# написать цвет руками, и подсветка при этом не работала бы. Теперь проверяется
+# цепочка, по которой цвет доходит до экрана:
+#   1. есть правило :hover на самой карточке (тот же тег или класс, что у
+#      карточки компании), а не на .name (там старая подсказка);
+#   2. подсветка в этом правиле (background, border-color, box-shadow, outline)
+#      берёт цвет из переменной: var(--что-то), а не пишет один цвет для всех;
+#   3. эту переменную задаёт КАЖДАЯ из 20 карточек, своим значением #rrggbb
+#      (в style самой карточки);
+#   4. все 20 значений разные: один и тот же цвет у всех не «бренды».
+# Если разорвать любое звено (убрать var(), убрать значение у одной карточки,
+# повесить :hover не на карточку, покрасить всех одинаково), строка станет НЕТ,
+# даже если подходящий текст на странице остался.
 #
-# ГЛАЗАМИ: что при наведении цвет правда фирменный (Tesla красная, Nvidia
-# зелёная и т.д.) и что подсветка появляется именно при курсоре. Скрипт не
-# двигает мышь и не знает, какой цвет «фирменный».
+# Что скрипт по-прежнему НЕ видит, и это проверяется ГЛАЗАМИ:
+#   - что :hover реально срабатывает в браузере: каскад или другое правило
+#     могут перебить его, скрипт этого не вычисляет;
+#   - что цвет у карточки правда фирменный (#e31937 у Tesla или случайный
+#     красный): скрипт знает только, что цвета заданы и разные;
+#   - что подсветка заметна на тёмном фоне (тёмно-синий бренд почти не светит);
+#   - реализация без переменной (по отдельному :hover-правилу на каждую
+#     компанию) даст НЕТ: скрипт требует именно механизм с var(--…).
 # ---------------------------------------------------------------------------
+# Строка карточки компании: в ней есть название и атрибут style.
+card_line() { grep -iE "$1" "$PAGE" | grep -E 'style="' | head -1; }
+
 HOVER=$(printf '%s\n' "$CSS" | tr '\n' ' ' | grep -oiE '[^{}]*:hover[^{}]*\{[^}]*\}' | grep -viE '^[[:space:]]*\.name' || true)
+BRANDVAR=""
 if [ -z "$HOVER" ]; then
   why "нет правила :hover для карточки (есть только для .name, или совсем нет)"
 else
-  printf '%s\n' "$HOVER" | grep -qiE 'background|border-color|box-shadow|outline|color' \
-    || why "правило :hover есть, но в нём нет подсветки (background, border-color, box-shadow)"
+  # 1. правило :hover стоит на том же элементе, что и карточка
+  TAG=$(card_line Nvidia | grep -oE '<[a-zA-Z0-9]+' | head -1 | tr -d '<')
+  CLS=$(card_line Nvidia | grep -oE '^[^>]*>' | grep -oE 'class="[^"]*"' | head -1 | sed 's/class="\([^" ]*\).*/\1/')
+  SEL=$(printf '%s\n' "$HOVER" | sed 's/{.*//')
+  if [ -z "$TAG" ]; then
+    why "не нашёл карточку компании (строку с названием и style), не к чему привязать :hover"
+  elif ! { printf '%s\n' "$SEL" | grep -qE "(^|[^a-zA-Z0-9_-])${TAG}:hover" || { [ -n "$CLS" ] && printf '%s\n' "$SEL" | grep -qE "\.${CLS}:hover"; }; }; then
+    why ":hover есть ($(printf '%s' "$SEL" | head -c 40)), но не на карточке <$TAG>"
+  fi
+  # 2. подсветка берёт цвет из переменной, 3. её задаёт карточка
+  VARS=$(printf '%s\n' "$HOVER" | grep -oiE '(background|border-color|box-shadow|outline(-color)?|border)[^;}]*' | grep -oE 'var\(--[^) ,]+' | sed 's/var(//' | sort -u)
+  if [ -z "$VARS" ]; then
+    why "в :hover нет подсветки с цветом из переменной var(--…): background, border-color или box-shadow"
+  else
+    for v in $VARS; do
+      if card_line Nvidia | grep -qiE -- "${v}:[[:space:]]*#[0-9a-f]{6}\b"; then BRANDVAR="$v"; break; fi
+    done
+    [ -n "$BRANDVAR" ] || why "подсветка берёт цвет из ($(echo $VARS)), но карточка компании эту переменную не задаёт"
+  fi
 fi
-NOCOLOR=""
-for name in Nvidia Apple Microsoft Alphabet Amazon Meta Broadcom Aramco TSMC Tesla Berkshire Lilly Walmart JPMorgan Samsung Tencent Visa Oracle Exxon Mastercard; do
-  grep -iE "$name" "$PAGE" | grep -qiE '#[0-9a-f]{6}\b' || NOCOLOR="$NOCOLOR $name"
-done
-[ -z "$NOCOLOR" ] || why "не нашёл цвета бренда рядом с названием:$NOCOLOR"
+if [ -n "$BRANDVAR" ]; then
+  FOUND=""; MISSING=""
+  for name in Nvidia Apple Microsoft Alphabet Amazon Meta Broadcom Aramco TSMC Tesla Berkshire Lilly Walmart JPMorgan Samsung Tencent Visa Oracle Exxon Mastercard; do
+    c=$(card_line "$name" | grep -oiE -- "${BRANDVAR}:[[:space:]]*#[0-9a-f]{6}\b" | head -1 | grep -oiE '#[0-9a-f]{6}' | tr 'A-F' 'a-f')
+    if [ -z "$c" ]; then MISSING="$MISSING $name"; else FOUND="$FOUND $c"; fi
+  done
+  [ -z "$MISSING" ] || why "у карточки нет значения ${BRANDVAR}: #rrggbb:$MISSING"
+  DUP=$(printf '%s\n' $FOUND | sort | uniq -d | tr '\n' ' ')
+  [ -z "$DUP" ] || why "цвета бренда повторяются у разных компаний: $DUP"
+fi
 verdict "3. При наведении карточка подсвечивается цветом бренда"
 
 echo "  ----------------------------------------------"
