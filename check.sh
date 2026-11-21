@@ -247,6 +247,81 @@ if [ -n "$BRANDVAR" ]; then
 fi
 verdict "4.3 При наведении карточка подсвечивается цветом бренда"
 
+# ===========================================================================
+section "Задание 5 (zadanie-5.md)"
+# ===========================================================================
+
+# 5.2. Клик по карточке инвертирует isFlipped и запускает 3D-поворот
+# (и обратно при следующем клике).
+#
+# Проверяется цепочка, а не отдельные слова. Разорвёшь любое звено: строка
+# станет НЕТ, даже если нужные слова на странице остались:
+#   1. в JS есть обработчик клика, где isFlipped = !isFlipped (именно
+#      инверсия, а не «= true»);
+#   2. то же состояние управляет классом: classList.toggle("класс", ...isFlipped)
+#      (toggle с состоянием, а не add: иначе «обратно» не работает);
+#   3. в CSS у этого класса есть rotateY(...): поворот привязан к классу;
+#   4. у вращающегося элемента (последний класс в селекторе поворота) есть
+#      transition по transform: поворот анимируется, а не прыгает;
+#   5. у него же transform-style: preserve-3d, в CSS есть perspective, есть
+#      backface-visibility: hidden и обратная сторона со своим rotateY:
+#      иначе поворот плоский и видна не та сторона.
+#
+# ГЛАЗАМИ: что клик правда переворачивает карточку в браузере (каскад или
+# другой код могут это перебить), что анимация плавная и красивая, что на
+# обороте видна нужная сторона. Скрипт читает текст, а не запускает страницу.
+# Предикаты 5.1 (isFlipped == false, лицевая сторона) и 5.3 (iPhone) сюда
+# не входят.
+JS=$(sed -n '/<script>/,/<\/script>/p' "$PAGE" | tr '\n' ' ')
+CSSF=$(printf '%s\n' "$CSS" | tr '\n' ' ')
+
+# 1. обработчик клика с инверсией
+CLICK=$(printf '%s\n' "$JS" | grep -oE 'addEventListener\([[:space:]]*"click"[^}]*\}' | head -1)
+if [ -z "$CLICK" ]; then
+  why "нет обработчика клика (addEventListener(\"click\", ...)) на карточках"
+elif ! printf '%s\n' "$CLICK" | grep -qE '\.?isFlipped[[:space:]]*=[[:space:]]*![[:space:]]*[A-Za-z0-9_.]*isFlipped'; then
+  why "в обработчике клика нет инверсии isFlipped = !isFlipped"
+fi
+
+# 2. состояние управляет классом через toggle
+FLIPCLS=""
+if [ -n "$CLICK" ]; then
+  FLIPCLS=$(printf '%s\n' "$CLICK" | grep -oE 'classList\.toggle\([[:space:]]*"[^"]+"[[:space:]]*,[^)]*isFlipped' | head -1 | sed 's/.*toggle([[:space:]]*"\([^"]*\)".*/\1/')
+  [ -n "$FLIPCLS" ] || why "в обработчике нет classList.toggle(\"класс\", ...isFlipped): класс не следует за isFlipped"
+fi
+
+# 3. у этого класса в CSS есть rotateY
+SPIN=""
+if [ -n "$FLIPCLS" ]; then
+  RULE=$(printf '%s\n' "$CSSF" | grep -oE "[^{}]*\.${FLIPCLS}[^{}]*\{[^}]*rotateY\([^)]*\)[^}]*\}" | head -1)
+  if [ -z "$RULE" ]; then
+    why "в CSS у класса .${FLIPCLS} нет rotateY(...): поворота при перевороте нет"
+  else
+    # 4. вращающийся элемент: последний класс в селекторе поворота
+    SPIN=$(printf '%s\n' "${RULE%%\{*}" | grep -oE '\.[A-Za-z0-9_-]+' | tail -1 | tr -d '.')
+    [ "$SPIN" != "$FLIPCLS" ] || SPIN=""
+    [ -n "$SPIN" ] || why "поворот задан на самом .${FLIPCLS}: не нашёл вращающийся элемент внутри карточки"
+  fi
+fi
+if [ -n "$SPIN" ]; then
+  SPINRULE=$(printf '%s\n' "$CSSF" | grep -oE '[^{}]+\{[^}]*\}' | while IFS= read -r rl; do
+    sel=$(printf '%s' "${rl%%\{*}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+    [ "$sel" = ".${SPIN}" ] && printf '%s\n' "$rl"
+  done)
+  printf '%s\n' "$SPINRULE" | grep -qE 'transition:[^;}]*(transform|all)' \
+    || why "у .${SPIN} нет transition по transform: поворот не анимируется"
+  # 5. настоящая 3D-механика
+  printf '%s\n' "$SPINRULE" | grep -qE 'transform-style:[[:space:]]*preserve-3d' \
+    || why "у .${SPIN} нет transform-style: preserve-3d: поворот будет плоским"
+  printf '%s\n' "$CSSF" | grep -qE 'perspective:' \
+    || why "в CSS нет perspective: нет глубины, 3D не видно"
+  printf '%s\n' "$CSSF" | grep -qE '(^|[^-])backface-visibility:[[:space:]]*hidden' \
+    || why "нет backface-visibility: hidden: две стороны наложатся друг на друга"
+  [ "$(printf '%s\n' "$CSSF" | grep -oE 'rotateY\(' | wc -l)" -ge 2 ] \
+    || why "rotateY только один: у обратной стороны нет своего разворота на 180°"
+fi
+verdict "5.2 Клик инвертирует isFlipped и запускает 3D-поворот"
+
 echo "  ----------------------------------------------"
 if [ "$FAIL" -eq 0 ]; then
   printf '  %s\n\n' "$(g 'ЗЕЛЁНОЕ')"
