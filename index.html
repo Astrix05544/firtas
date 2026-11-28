@@ -60,6 +60,12 @@
   #игра[hidden] { display: none; }
   #игра p { margin: 0 0 .75rem; }
   #игра button { margin: 0 8px 8px 0; }
+  #поиск {
+    width: 100%; max-width: 20rem; margin: 0 0 1rem; padding: 8px 12px; font: inherit;
+    color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+  }
+  #поиск:focus { outline: none; border-color: var(--green); }
+  #поиск[hidden] { display: none; }
   </style>
 </head>
 <body>
@@ -78,6 +84,9 @@
     <p id="итог"></p>
     <button type="button" onclick="закончить()">Закончить</button>
   </div>
+
+  <input type="search" id="поиск" placeholder="Поиск" aria-label="Поиск по названию компании" oninput="искать()">
+  <p id="пусто" class="dim" hidden>Ничего не найдено</p>
 
   <ol>
     <li style="--brand:#76b900;--cap:5.0;--c:8;--r:5"><div class="inner"><div class="face front"><img class="logo" src="https://www.google.com/s2/favicons?domain=nvidia.com&sz=64" alt="Логотип Nvidia" width="24" height="24"><span class="name" tabindex="0" data-info="Основана: 1993 · CEO: Дженсен Хуанг">Nvidia</span> <span class="cap">— ≈ 5,0 трлн $</span></div></div></li>
@@ -123,6 +132,8 @@
     document.getElementById("счёт").innerText = счёт;
     document.getElementById("игра").hidden = false;
     document.querySelector("ol").hidden = true;
+    document.getElementById("поиск").hidden = true;
+    document.getElementById("пусто").hidden = true;
     новаяПара();
   }
 
@@ -130,6 +141,8 @@
     clearTimeout(таймер);
     document.getElementById("игра").hidden = true;
     document.querySelector("ol").hidden = false;
+    document.getElementById("поиск").hidden = false;
+    искать();
   }
 
   function новаяПара() {
@@ -179,6 +192,19 @@
       li.classList.toggle("flipped", li.isFlipped);
     });
   });
+
+  // Поиск: оставляем карточки, в названии которых есть введённый текст (регистр не важен)
+  function искать() {
+    var запрос = document.getElementById("поиск").value.trim().toLowerCase();
+    var найдено = 0;
+    document.querySelectorAll("li").forEach(function (li) {
+      var подходит = li.querySelector(".name").textContent.toLowerCase().includes(запрос);
+      li.hidden = !подходит;
+      if (подходит) найдено++;
+    });
+    document.getElementById("пусто").hidden = найдено > 0;
+  }
+  искать();
 
   function скачать() {
     // 1. Рисуем страницу на листе A4 (в два раза крупнее, чтобы было чётко)
